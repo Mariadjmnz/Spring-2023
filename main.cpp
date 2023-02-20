@@ -1,42 +1,40 @@
 #include <iostream>
-#include "VendingMachine.h"
-#include <string>
+#include <bits/stdc++.h>
+#include "WordTree.h"
+#include "WordNode.h"
 
 using namespace std;
 
-int main() {
-    string choice;
-    float money;
+int main()
+{
+    int lineNumber = 1;
+    fstream file;
+    string line, word, filename;
+    filename = "test.txt";
+    file.open(filename.c_str());
 
-    VendingMachine vm("#01");
+    WordTree * tree = new WordTree;
 
-    Item coke("Coke", 10, 1.5);
-    Item pepsi("Pepsi", 20, 1.75);
-    Item water("Water", 15, 1.25);
-
-    vm.stockItem(coke);
-    vm.stockItem(pepsi);
-    vm.stockItem(water);
-
-    vm.showItems();
-
-    cout << "\n Select item: " << endl;
-    cin >> choice;
-    cout << "Insert amount: " << endl;
-    cin >> money;
-
-    cout << "\n Selecting item " << choice << "..." << endl;
-    if (vm.selectItem(choice))
-        {
-            vm.getItem(choice, money);
-            cout << "Transaction was successful." << endl << endl;
+    //while (file >> word) {
+      while (getline(file,line)) {
+        istringstream iss(line);
+        while (iss >> word) {
+           word.erase(remove(word.begin(), word.end(), ','), word.end());
+           word.erase(remove(word.begin(), word.end(), '.'), word.end());
+           word.erase(remove(word.begin(), word.end(), ';'), word.end());
+           word.erase(remove(word.begin(), word.end(), '-'), word.end());
+           transform (word.begin(), word.end(), word.begin(), ::tolower);
+           tree->insert(word,lineNumber);
         }
-    else
-        {
-            cout << "Item not available." << endl << endl;
-        }
+        lineNumber++;
+    }
 
-    vm.showItems();
+    tree->printTreeInOrder();
+
+    cout << "There are " << tree->countWords() << " in the file" << endl;
+    cout << "There are " << tree->countUniqueWords() << " unique words in the file" << endl;
+    cout << "Alphabetical first word: " << tree->firstWord() << endl;
+    cout << "Alphabetical last word: " << tree->lastWord() << endl;
 
     return 0;
 }
