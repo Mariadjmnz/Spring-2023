@@ -10,7 +10,7 @@ int main()
     int lineNumber = 1;
     fstream file;
     string line, word, filename;
-    filename = "test.txt";
+    filename = "Test.txt";
     file.open(filename.c_str());
 
     WordTree * tree = new WordTree;

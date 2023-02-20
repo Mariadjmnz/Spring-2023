@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <string>
 #include <vector>
 
@@ -21,7 +20,14 @@ WordNode * WordTree::insert(WordNode * node, string word, int line)
         node = new WordNode;
         node->m_word = word;
         // set word count to one
-        // set vector to contain that line number
+        node->m_wordCount = 1;
+
+        // initialize wordLines as a vector containing one element
+        vector<int> wordLines = {line};
+
+        // assign wordLines to node's m_lineNumbers member
+        node->m_lineNumbers = wordLines;
+
         node->m_left = NULL;
         node->m_right = NULL;
         node->m_parent = NULL;
@@ -72,21 +78,14 @@ void WordTree::printTreeInOrder(WordNode * node)
     printTreeInOrder(node->m_left);
 
     // Print the key, word count, and line numbers
-    cout << node->m_word << " occurs " << node->m_wordCount + 1 << " times, on line(s) ";
+    cout << node->m_word << " occurs " << node->m_wordCount << " times, on line(s) ";
 
      // for loop to print out the vector
     for (int i=0; i < node->m_lineNumbers.size(); i++)
     {
-        cout << node->m_lineNumbers[i] << " \n";
-
-        // Print a comma and space after each element, except the last one
-        if (i != node->m_lineNumbers.size() - 1)
-        {
-            cout << " ,";
-        }
+        if (node->m_wordCount)
+            cout << node->m_lineNumbers[i] << " \n";
     }
-
-    cout << endl;
 
     // Continue to the greatest key which is in the right subtree
     printTreeInOrder(node->m_right);
